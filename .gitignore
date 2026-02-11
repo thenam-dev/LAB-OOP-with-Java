@@ -1,3 +1,5 @@
 *.class
 /build/
 /dist/
+/Manage Task/J1.LS.P0071/nbproject/private/
+/Manage Task/J1.LS.P0071/build/
