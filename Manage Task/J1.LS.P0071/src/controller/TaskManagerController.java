@@ -49,7 +49,7 @@ public class TaskManagerController {
 
     public void displayTask() {
         if (taskManager.isEmpty()) {
-            System.out.println("List task is empty!");
+            System.err.println("List task is empty!");
         } else {
             taskManager.displayTask();
         }
@@ -65,7 +65,7 @@ public class TaskManagerController {
         if (taskManager.deleteTaskById(taskId)) {
             System.out.println("Delete successfully!");
         } else {
-            System.out.println("Delete fail!");
+            System.err.println("Delete fail!");
         }
     }
 }
