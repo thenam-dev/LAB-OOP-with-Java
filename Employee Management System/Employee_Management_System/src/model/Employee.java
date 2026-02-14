@@ -15,16 +15,28 @@ public class Employee {
     private String phone;
     private String dob;
     private boolean sex;
+    private double salary;
 
     public Employee() {
     }
 
-    public Employee(int id, String name, String phone, String dob, boolean sex) {
+    public Employee(int id, String name, String phone, String dob, boolean sex, double salary) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.dob = dob;
         this.sex = sex;
+        this.salary = salary;
+    }
+
+    
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 
     public int getId() {

@@ -32,34 +32,42 @@ public class Main {
 //        listE.put(e2.getId(), e2);
 //        
 //        System.out.println(listE.get(1)); //get key de lay obj
-Validate v = new Validate();
+        Validate v = new Validate();
         EmployeeController c = new EmployeeController();
-        while(true) {
+        while (true) {
+            System.out.println("======Employee Manager======");
             System.out.println("1. Add employee");
             System.out.println("2. Display employee");
-            System.out.println("3. Delete employee");
-            System.out.println("4. Search employee");
+            System.out.println("3. Update employee");
+            System.out.println("4. Delete employee");
             System.out.println("5. Sort employee by salary");
-            System.out.println("6. Exit");
-            int choice = v.inputInt("Enter choice: ", 1, 6);
-            switch(choice) {
+            System.out.println("6. Search employeebby name");
+            System.out.println("7. Exit");
+            int choice = Validate.inputInt("Enter choice: ", 1, 7);
+            switch (choice) {
                 case 1:
                     c.addEmployee();
                     break;
                 case 2:
                     c.displayEmployee();
+                    break;
                 case 3:
-//                    c.deleteEmployee();
+                    c.updateEmployee();
+                    break;
                 case 4:
-//                    c.searchEmployee();
+                    c.deleteEmployee();
+                    break;
                 case 5:
-//                    c.sortEmployeeBySalary();
+                    c.displayEmployeeSortedBySalary();
+                    break;
                 case 6:
+                    c.searchEmployeeByName();
+                    break;
+                case 7:
                     System.out.println("Thank for using my system");
                     return;
                 default:
                     System.out.println("Please choose your option!");
-                            
             }
         }
     }
