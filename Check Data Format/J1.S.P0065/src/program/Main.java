@@ -1,0 +1,25 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package program;
+
+import bo.StudentManager;
+
+/**
+ *
+ * @author ACER
+ */
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        StudentManager m = new StudentManager();
+        m.createStudent();
+        m.getPercentTypeStudent();
+        m.displayInformation();
+    }
+
+}
