@@ -28,17 +28,34 @@ public class ManagerStudent {
         studentMap = new HashMap<>();
         semesterList = new ArrayList<>();
         enrollments = new ArrayList<>();
+
+        // Students
+        Student s1 = new Student("HE180111", "Nam Nguyen");
+        Student s2 = new Student("HE180112", "John Smith");
+        Student s3 = new Student("HE180113", "Anna Lee");
+
+        // Semesters
+        Semester sem1 = new Semester("SP26");
+        Semester sem2 = new Semester("SU26");
+        Semester sem3 = new Semester("FA25");
+
+        // Add enrollments
+        enrollments.add(new Enrollment(s1, sem1, Course.JAVA));
+        enrollments.add(new Enrollment(s1, sem2, Course.DOT_NET));
+        enrollments.add(new Enrollment(s2, sem1, Course.CPP));
+        enrollments.add(new Enrollment(s3, sem3, Course.JAVA));
+        enrollments.add(new Enrollment(s2, sem2, Course.DOT_NET));
     }
 
     public void createStudent() {
         while (true) {
             //input studentId and studentName
             String id = Validation.getString("Student ID: ", "^HE\\d{6}$");
-            String name = Validation.getString("Student name: ", "^[A-Z][a-z]*(\\\\s[A-Z][a-z]*)*$");
+            String name = Validation.getString("Student name: ", "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*$");
 
             Student st = findStudentByIdName(id, name); //check exist
 
-            String semesterCode = Validation.getString("Semester code (v.d FA23): ", "^[A-Z]{2}\\\\d{2}$");
+            String semesterCode = Validation.getString("Semester code (v.d FA23): ", "^[A-Z]{2}\\d{2}$");
             Semester semester = getOrCreaterSemester(semesterCode);
 
             Course course = chooseCourse();
@@ -48,8 +65,9 @@ public class ManagerStudent {
             } else {
                 enrollments.add(new Enrollment(st, semester, course));
                 System.out.println("Add student information Successfully!");
+                break;
             }
-            if (enrollments.size() >= 3 && !Validation.getYesNo("Do you want to adding (Y/y) or (N/n)")) {
+            if (enrollments.size() >= 6 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
                 break;
             }
         }
@@ -73,7 +91,7 @@ public class ManagerStudent {
         //sort by name
         Collections.sort(resultEnrollments, new Enrollment());
         //print
-        System.out.printf("%-15s%-20s-%-10s-%-8s%n", "ID", "Name", "Semester", "Course");
+        System.out.printf("%-15s%-20s%-10s%-8s%n", "ID", "Name", "Semester", "Course");
         for (Enrollment resultEnrollment : resultEnrollments) {
             System.out.println(resultEnrollment);
         }
@@ -134,10 +152,10 @@ public class ManagerStudent {
     private boolean isDuplicate(Student st, Semester semester, Course course) {
         for (Enrollment e : enrollments) {
             if (e.getStudent() == st && e.getSemester() == semester && e.getCourse() == course) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private ArrayList<Enrollment> findEnrollmentByKeyName(String keySearch) {
@@ -156,34 +174,35 @@ public class ManagerStudent {
         String id = Validation.getString("Student ID: ", "HE\\d{6}$");
         ArrayList<Enrollment> listById = getEnrollmentById(id);
         if (listById.isEmpty()) {
-            System.out.println("Id not found!");
+            System.err.println("Id not found!");
             return;
         }
         showAllEnrollmentList(listById);
-        int idRecord = Validation.getInt("Choose record: ", 1, listById.size() - 1);
-        Enrollment updateStudent = listById.get(idRecord);
-        
+        int idRecord = Validation.getInt("Choose record: ", 1, listById.size());
+        Enrollment updateStudent = listById.get(idRecord - 1);
+
         //input update
-        String newName = Validation.getString("New name(blank to keep): ", ".*");
+        String newName = Validation.getString("New name(blank to keep): ");
         if (newName.length() > 0) {
             updateStudent.getStudent().setStudentName(newName);
+
+            String newSemester = Validation.getString("Semester code: ", "^[A-Z]{2}\\d{2}$");
+            Semester newSem = getOrCreaterSemester(newSemester);
+            Course newCourse = chooseCourse();
+
+            //check exist
+            if (isDuplicate(updateStudent.getStudent(), newSem, newCourse)) {
+                System.err.println("Duplicate enrollment update cancelled!!!");
+                return;
+            }
+            if (!sameSemester(updateStudent, newSem) && isSemesterFull(updateStudent.getStudent(), newSem)) {
+                System.err.println("This student already has 3 courses in " + newSem.getCode() + "!");
+                return;
+            }
+            updateStudent.setSemester(newSem);
+            updateStudent.setCourse(newCourse);
+            System.out.println("Updated successfully!");
         }
-        String newSemester = Validation.getString("Semester code: ", "^[A-Z]\\\\d{2}$");
-        Semester newSem = getOrCreaterSemester(newSemester);
-        Course newCourse = chooseCourse();
-        
-        //check exist
-        if (isDuplicate(updateStudent.getStudent(), newSem, newCourse)) {
-            System.err.println("Duplicate enrollment update cancelled!!!");
-            return;
-        }
-        if (!sameSemester(updateStudent, newSem) && isSemesterFull(updateStudent.getStudent(), newSem)) {
-            System.err.println("This student already has 3 courses in " + newSem.getCode() + "!");
-            return;
-        }
-        updateStudent.setSemester(newSem);
-        updateStudent.setCourse(newCourse);
-        System.out.println("Updated successfully!");
     }
 
     private void deleteStudent() {
@@ -198,6 +217,24 @@ public class ManagerStudent {
         Enrollment deleteStudent = listById.get(idRecord);
         enrollments.remove(deleteStudent);
         System.out.println("Delete successfully!");
+    }
+
+    public void report() {
+        if (enrollments.isEmpty()) {
+            System.err.println("Database is empty!");
+            return;
+        }
+
+        Map<String, Integer> counter = new HashMap<>();
+        for (Enrollment e : enrollments) {
+            String key = String.format("%-15s|%-10s", e.getStudent().getStudentName(), e.getCourse().getName());
+            counter.put(key, counter.getOrDefault(key, 0) + 1);
+        }
+        //duyet map de in ra
+        System.out.printf("%-15s|%-10s|%-5s%n", "Student name", "Course", "Total");
+        for (Map.Entry<String, Integer> entry : counter.entrySet()) { //entrySet: lay toan bo phan tu trong map
+            System.out.printf("%-15s|%-5s%n", entry.getKey(), entry.getValue());
+        }
     }
 
     private ArrayList<Enrollment> getEnrollmentById(String id) {

@@ -20,12 +20,12 @@ public class Validation {
             try {
                 int result = Integer.parseInt(sc.nextLine().trim());
                 if (result < min || result > max) {
-                    System.out.println("Please input number in range [" + min + ", " + max + "]");
+                    System.out.println("Please input number in range [" + min + ", " + max + "]!: ");
                 } else {
                     return result;
                 }
             } catch (Exception e) {
-                System.out.println("Input must be integer number!");
+                System.out.println("Input must be integer number!: ");
             }
         }
     }
@@ -47,11 +47,11 @@ public class Validation {
         while(true){
             String input = sc.nextLine();
             if(input.isEmpty()){
-                System.out.println("Please input a non-empty string!");
+                System.out.println("Please input a non-empty string!: ");
                 continue;
             }
             if(!input.matches(regex)){
-                System.out.println("Please input matches regex: "+ regex + " !:");
+                System.out.println("Please input matches regex: "+ regex + " !: ");
                 continue;
             }
             return input;

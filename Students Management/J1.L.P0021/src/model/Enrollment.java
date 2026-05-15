@@ -55,7 +55,7 @@ public class Enrollment implements Comparator<Enrollment>{
 
     @Override
     public String toString() {
-        return String.format("%-15s%-20s-%-10s-%-8s%", student.getId(), student.getStudentName(),semester.getCode(),course.getName());
+        return String.format("%-15s%-20s%-10s%-8s", student.getId(), student.getStudentName(),semester.getCode(),course.getName());
     }
 
     

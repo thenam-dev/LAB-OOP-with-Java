@@ -4,7 +4,9 @@
  */
 package view;
 
+import controller.ManagerStudent;
 import model.Course;
+import model.Enrollment;
 
 /**
  *
@@ -17,8 +19,8 @@ public class J1LP0021 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Course c1 = Course.DOT_NET;
-        System.out.println(c1.getName());
+        Menu m = new Menu();
+        m.display();
     }
 
 }
