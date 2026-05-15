@@ -20,12 +20,12 @@ public class Validation {
             try {
                 int result = Integer.parseInt(sc.nextLine().trim());
                 if (result < min || result > max) {
-                    System.out.println("Please input number in range [" + min + ", " + max + "]!: ");
+                    System.err.println("Please input number in range [" + min + ", " + max + "]!: ");
                 } else {
                     return result;
                 }
             } catch (Exception e) {
-                System.out.println("Input must be integer number!: ");
+                System.err.println("Input must be integer number!: ");
             }
         }
     }
@@ -35,7 +35,7 @@ public class Validation {
         while(true){
             String input = sc.nextLine();
             if(input.isEmpty()){
-                System.out.println("Please input a non-empty string!");
+                System.err.println("Please input a non-empty string!");
                 continue;
             }
             return input;
@@ -51,7 +51,7 @@ public class Validation {
                 continue;
             }
             if(!input.matches(regex)){
-                System.out.println("Please input matches regex: "+ regex + " !: ");
+                System.err.println("Please input matches regex: "+ regex + " !: ");
                 continue;
             }
             return input;
@@ -63,7 +63,7 @@ public class Validation {
         while(true){
             String input = sc.nextLine().trim();
             if(input.isEmpty()){
-                System.out.println("Please input a non-empty string!");
+                System.err.println("Please input a non-empty string!");
                 continue;
             }
             if(input.equalsIgnoreCase("y")){
@@ -71,7 +71,7 @@ public class Validation {
             } else if (input.equalsIgnoreCase("n")){
                 return false;
             } else {
-                System.out.println("You must be enter (Y/y) or (N/n) !!!:");
+                System.err.println("You must be enter (Y/y) or (N/n) !!!:");
             }
         }
     }

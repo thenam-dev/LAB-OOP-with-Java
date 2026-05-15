@@ -4,16 +4,11 @@
  */
 package view;
 
-import controller.ManagerStudent;
-import model.Course;
-import model.Enrollment;
-
 /**
  *
  * @author ACER
  */
 public class J1LP0021 {
-
     /**
      * @param args the command line arguments
      */

@@ -45,6 +45,15 @@ public class ManagerStudent {
         enrollments.add(new Enrollment(s2, sem1, Course.CPP));
         enrollments.add(new Enrollment(s3, sem3, Course.JAVA));
         enrollments.add(new Enrollment(s2, sem2, Course.DOT_NET));
+        // Add studentMap
+        studentMap.put(s1.getId(), s1);
+        studentMap.put(s2.getId(), s2);
+        studentMap.put(s3.getId(), s3);
+        //Add semesterList
+        semesterList.add(sem1);
+        semesterList.add(sem2);
+        semesterList.add(sem3);
+
     }
 
     public void createStudent() {
@@ -52,22 +61,22 @@ public class ManagerStudent {
             //input studentId and studentName
             String id = Validation.getString("Student ID: ", "^HE\\d{6}$");
             String name = Validation.getString("Student name: ", "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*$");
-
-            Student st = findStudentByIdName(id, name); //check exist
+            //check exist
+            Student st = findStudentByIdName(id, name);
 
             String semesterCode = Validation.getString("Semester code (v.d FA23): ", "^[A-Z]{2}\\d{2}$");
             Semester semester = getOrCreaterSemester(semesterCode);
 
             Course course = chooseCourse();
-
+            //check duplicate
             if (isDuplicate(st, semester, course)) {
-                System.out.println("Duplicate enrollment!!!");
+                System.err.println("Duplicate enrollment!!!");
             } else {
                 enrollments.add(new Enrollment(st, semester, course));
                 System.out.println("Add student information Successfully!");
                 break;
             }
-            if (enrollments.size() >= 6 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
+            if (enrollments.size() >= 7 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
                 break;
             }
         }
@@ -102,15 +111,16 @@ public class ManagerStudent {
             System.err.println("Database is empty!!!");
             return;
         }
-
-        int choice = Validation.getInt("Do you want to (1.Update | 2.Delete) ", 1, 2);
+        String choice = Validation.getString("Do you want to Update or Delete? (Uu/Dd)", "^[UuDd]$").toUpperCase();
         switch (choice) {
-            case 1:
+            case "U":
                 updateStudent();
                 break;
-            case 2:
+            case "D":
                 deleteStudent();
                 break;
+            default:
+                System.err.println("Please input (U/u) to Update or (D/d) to Delete!");
         }
     }
 
@@ -127,7 +137,7 @@ public class ManagerStudent {
 
     private Semester getOrCreaterSemester(String semesterCode) {
         for (Semester semester : semesterList) {
-            if (semester.getCode().equals(enrollments)) {
+            if (semester.getCode().equals(semesterCode)) {
                 return semester;
             }
         }
@@ -182,7 +192,7 @@ public class ManagerStudent {
         Enrollment updateStudent = listById.get(idRecord - 1);
 
         //input update
-        String newName = Validation.getString("New name(blank to keep): ");
+        String newName = Validation.getString("New student name: ");
         if (newName.length() > 0) {
             updateStudent.getStudent().setStudentName(newName);
 
@@ -209,7 +219,7 @@ public class ManagerStudent {
         String id = Validation.getString("Student ID: ", "HE\\d{6}$");
         ArrayList<Enrollment> listById = getEnrollmentById(id);
         if (listById.isEmpty()) {
-            System.out.println("Id not found!");
+            System.err.println("Id not found!");
             return;
         }
         showAllEnrollmentList(listById);
@@ -224,7 +234,6 @@ public class ManagerStudent {
             System.err.println("Database is empty!");
             return;
         }
-
         Map<String, Integer> counter = new HashMap<>();
         for (Enrollment e : enrollments) {
             String key = String.format("%-15s|%-10s", e.getStudent().getStudentName(), e.getCourse().getName());

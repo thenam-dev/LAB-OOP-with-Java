@@ -16,6 +16,7 @@ public class Menu {
         ManagerStudent managerStudent = new ManagerStudent();
         int choice;
         do{
+            System.out.println();
             System.out.println("======WELCOME TO STUDENT MANAGEMENT======");
             System.out.println("1. Create Student");
             System.out.println("2. Find and Sort Student");
