@@ -69,30 +69,4 @@ public class Triangle extends Shape {
         System.out.println("Area: " + getArea());
         System.out.println("Perimeter: " + getPerimeter());
     }
-
-    @Override
-    public void input() {
-        do {
-            sideA = Validate.getDouble("Please input side A of Triangle: ", 0, Double.MAX_VALUE);
-            sideB = Validate.getDouble("Please input side B of Triangle: ", 0, Double.MAX_VALUE);
-            sideC = Validate.getDouble("Please input side C of Triangle: ", 0, Double.MAX_VALUE);
-            if(checkTriangle()) {
-                setSideA(sideA);
-                setSideB(sideB);
-                setSideC(sideC);
-                return;
-            } else {
-                System.err.println("Input triangle not valid. Enter again!");
-            }
-        } while (true);
-    }
-    
-    private boolean checkTriangle() {
-        if(sideA + sideB > sideC && sideB + sideC > sideA && sideC + sideA > sideB) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
 }

@@ -44,10 +44,4 @@ public class Circle extends Shape {
         System.out.println("Area: " + getArea());
         System.out.println("Perimeter: " + getPerimeter());
     }
-
-    @Override
-    public void input() {
-        radius = Validate.getDouble("Please input radius of Circle: ", 0, Double.MAX_VALUE);        
-    }
-
 }

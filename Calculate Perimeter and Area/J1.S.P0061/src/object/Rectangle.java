@@ -58,11 +58,4 @@ public class Rectangle extends Shape {
         System.out.println("Area: " + getArea());
         System.out.println("Perimeter: " + getPerimeter());
     }
-
-    @Override
-    public void input() {
-        width = Validate.getDouble("Please input side width of Rectangle: ", 0, Double.MAX_VALUE);
-        length = Validate.getDouble("Please input side length of Rectangle: ", 0, Double.MAX_VALUE);
-    }
-
 }

@@ -11,21 +11,31 @@ import java.util.Scanner;
  * @author ACER
  */
 public class Validate {
+
     private static final Scanner sc = new Scanner(System.in);
-    
-    public static double getDouble(String msg, double min, double max) {
+
+    public static double getDouble(String msg) {
+        double result;
         do {
             try {
                 System.out.println(msg);
-                double result = Double.parseDouble(sc.nextLine());
-                if (result <= min || result > max) {
-                    throw new NumberFormatException();
-                } else {
-                    return result;
+                result = Double.parseDouble(sc.nextLine().trim());
+                if (result <= 0) {
+                    System.err.println("Number must be greater than 0!");
                 }
             } catch (NumberFormatException e) {
+                result = -1;
                 System.err.println("Please input valid double number!");
             }
-        }while(true);
+        } while (result <= 0);
+        return result;
+    }
+
+    public static boolean checkTriangle(double sideA, double sideB, double sideC) {
+        if (sideA + sideB > sideC && sideB + sideC > sideA && sideC + sideA > sideB) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
