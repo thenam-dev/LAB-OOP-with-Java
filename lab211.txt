@@ -1,0 +1,159 @@
+=============================================================================O O P==========================================================================================================
+
+
+- ENCAPSULATION (ĐÓNG GÓI): ẩn dữ liệu bên trong object chỉ cho phép truy cập thông qua method -> bảo vệ dữ liệu, kiểm soát truy cập
+*Access modifier
++public: truy cập trực tiếp ở mọi class
++private: tránh truy cập trực tiếp (thông qua getter và setter)
+
+VD: class Student {
+    private String name;
+
+    public void setName(String name) { // cập nhật dữ liệu có kiểm soát
+        this.name = name;
+    }
+
+    public String getName() { // lấy dữ liệu
+        return name;
+    }
+}
+
+
+
+- INHERITANCE (KẾ THỪA): Lớp con sử dụng được các thuộc tính và method của lớp cha
+Keyword: extends
+
+VD: class Animal {
+	public void eat(){...}	
+} 
+
+ class Dog extends Animal {
+	public void bark(){...}
+}
+
+Main: Dog d = new Dog();
+	d.eat() -> eating
+	d.bark() -> barking
+
+*Keyword: super() -> dùng để gọi constructor hoặc method của lớp cha
+
+
+
+- POLYMORPHISM (ĐA HÌNH): cùng 1 method nhưng hành động khác nhau. Có 2 loại đa hình: 
+1. Overloading: cùng tên method nhưng khác parameter
+2. Overriding: class con viết lại method class cha
+
+VD: class Shape {
+	public void draw() {print(vẽ hình...)}
+
+class Circle extends Shape { //Overriding
+	public void draw(){
+		@Override
+		sout("Vẽ hình tròn");
+	}
+}
+class Square extends Shape{ //Overloading
+	public void draw(String s) {
+		sout("Vẽ ", s)	
+	}
+}
+
+
+
+- ABSTRACTION (TRỪU TƯỢNG): ẩn chi tiết bên trong, chỉ cho ng dùng thấy chức năng cần thiết. Có 2 cách:
+1. Abstraction class: class trừu tượng
++lớp con override phương thức chung
+VD:
+ abstract class Animal{
+	abstract void sound(); // phải có khai báo nhưng chưa bt cụ thể làm j
+	
+	public void sleep(){
+		sout("Sleeping");
+	}
+}
+
+ class Dog extends Animal{
+	@Override 
+	void sound(){
+		sout("gau gau");
+	}
+}
+
+*Ko tạo object Animal trực tiếp đc
+
+2. Interface: bản thiết kế
++bao gồm các phương thức trừu tượng chung
+VD: 
+ class Bird
+
+
+VD: Animal: void sound()
+	Dog: sound() == gau gau
+	Cat: sound() == meo meo
+
+
+		
+
+
+
+=============================================================================K E Y W O R D==================================================================================================
+
+
+-recursion(đệ quy): hàm gọi lại chính mình, phải có trường hợp thoát đệ quy (khi dãy số có không quá 1 phần tử) (ko nên dùng vì dễ gây tràn bộ nhớ)
+
+-private: truy cập thuộc tính qua getter và setter
+
+-final: ngăn ko cho thay đổi, ko thể gán đè giá trị khác, đối với phương thức thì ko thể ghi đè, đối vs class thì ko thể kế thừa
+
+-public static: tham chiếu các thuộc tính chung, truy cập qua class (ko phải tạo đối tượng)
+-> Nếu ko dùng static thì phải khởi tạo đối tượng trong main
+
++ Từ khóa static được sử dụng để chỉ ra rằng một thành phần thuộc về lớp chứa nó, chứ không phải thuộc về đối tượng cụ thể nào của lớp đó. Điều này có nghĩa là các đối tượng của lớp chia sẻ chung một bản sao chứa thành phần static và ko cần tạo đối tượng mới để truy cập nó.
+
+-trim(): cắt hết space ở đầu và cuối
+
+-split: là 1 phương thức của lớp String dùng để tách chuỗi
+
+- substring: String input="hello" // input.substring(): hàm lấy phần tử trong string
+
+-format lấy 2 số sau dấu phẩy: String.format("%.2f", x)
+
+-regex: "^[A-Z]{2}\\d{5,6}$"
+
+-HASHMAP: key:value
++ Ko thể chứa các key trùng lặp
++ cho phép giá trị null
++ HashMap là 1 tập hợp ko có thứ tự. Nó ko đảm bảo bất kỳ thứ tự cụ thể của các phần tử
++ Tính năng: Các giá trị đc lưu trữ trong map bằng cách tạo một cặp key-value. Giá trị có thể đc lấy bằng cách truyền key đến đúng phương thức
++ các phương thức: 
+	get(Object KEY): trả về giá trị đc liên kết vs 1 key
+	put(Object KEY, String VALUE): lưu trữ giá trị đc chỉ định và liên kết với key đc chỉ định
+
+
+
+===========================================================================FORM CODE LAB====================================================================================================
+_FORM: Main - Controller - Validation
+1. tạo model
+2. tạo utils:  Validate: số nguyên(int) , số thực(double), chuỗi(string)
+3. tạo bo (Manager): xử lí dữ liệu trong database
+4. tạo controller: xử lí các yêu cầu đề bài
+
+
+ 
+========================================================================================A L O G R I T H M===================================================================================
+- Bubble sort: Sắp xếp nổi bọt
+	Chạy từ đầu đến cuối mảng 
+	*Nếu phần tử đứng trước mà lớn hơn phần tử đứng sau thì đổi chỗ
+	*Sau mỗi vòng lặp thì phần tử lớn nhất sẽ trôi xuống dưới 
+	tốc độ ko cao: O(n^2)
+
+
+- Insertion sort : Sắp xếp chèn
+	Chạy từ đầu đến cuối mảng
+	*Tại vòng lặp i, coi như dãy từ [0,i-1] đã được sắp xếp, chèn phần tử a[i] vào vị trí thích hợp
+	*Sau vòng lặp thứ i thì dãy [0,i] đã được sắp xếp
+	tốc độ: O(n^2) 
+- Selection sort
+- Quick sort
+- Merge sort: Sắp xếp trộn
+- Heap sort
