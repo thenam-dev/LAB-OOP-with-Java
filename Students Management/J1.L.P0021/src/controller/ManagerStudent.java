@@ -53,33 +53,37 @@ public class ManagerStudent {
         semesterList.add(sem1);
         semesterList.add(sem2);
         semesterList.add(sem3);
-
     }
 
     public void createStudent() {
-        while (true) {
+        boolean isCreated=false;
+        do {
             //input studentId and studentName
-            String id = Validation.getString("Student ID: ", "^HE\\d{6}$");
-            String name = Validation.getString("Student name: ", "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*$");
+            String id = Validation.getString("Student ID: ", Validation.ID_VALID);
+            String name;
+            if (studentMap.containsKey(id)) {
+                name = studentMap.get(id).getStudentName();
+                System.out.println("Student name: "+name);
+            } else {
+                name = Validation.getString("Student name: ", Validation.NAME_VALID);
+            }
             //check exist
-            Student st = findStudentByIdName(id, name);
-
-            String semesterCode = Validation.getString("Semester code (v.d FA23): ", "^[A-Z]{2}\\d{2}$");
-            Semester semester = getOrCreaterSemester(semesterCode);
-
+            Student st = getOrCreateStudent(id, name);
+            String semesterCode = Validation.getString("Semester code (v.d FA23): ", Validation.SEMESTER_VALID);
+            Semester semester = getOrCreateSemester(semesterCode);
             Course course = chooseCourse();
             //check duplicate
             if (isDuplicate(st, semester, course)) {
                 System.err.println("Duplicate enrollment!!!");
             } else {
                 enrollments.add(new Enrollment(st, semester, course));
+                isCreated = true;
                 System.out.println("Add student information Successfully!");
-                break;
             }
             if (enrollments.size() >= 7 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
-                break;
+                isCreated = false;
             }
-        }
+        } while (isCreated);
     }
 
     public void findAndSort() {
@@ -94,7 +98,7 @@ public class ManagerStudent {
         ArrayList<Enrollment> resultEnrollments = findEnrollmentByKeyName(keySearch);
         //check exist
         if (resultEnrollments.isEmpty()) {
-            System.out.println("No student found!");
+            System.err.println("No student found!");
             return;
         }
         //sort by name
@@ -111,7 +115,7 @@ public class ManagerStudent {
             System.err.println("Database is empty!!!");
             return;
         }
-        String choice = Validation.getString("Do you want to Update or Delete? (Uu/Dd)", "^[UuDd]$").toUpperCase();
+        String choice = Validation.getString("Do you want to Update or Delete? (Uu/Dd)").toUpperCase();
         switch (choice) {
             case "U":
                 updateStudent();
@@ -121,21 +125,20 @@ public class ManagerStudent {
                 break;
             default:
                 System.err.println("Please input (U/u) to Update or (D/d) to Delete!");
+                break;
         }
     }
 
-    private Student findStudentByIdName(String id, String name) {
+    private Student getOrCreateStudent(String id, String name) {
         Student st = studentMap.get(id);
         if (st == null) {
             st = new Student(id, name);
             studentMap.put(id, st);
-        } else {
-            st.setStudentName(name);
         }
         return st;
     }
 
-    private Semester getOrCreaterSemester(String semesterCode) {
+    private Semester getOrCreateSemester(String semesterCode) {
         for (Semester semester : semesterList) {
             if (semester.getCode().equals(semesterCode)) {
                 return semester;
@@ -181,25 +184,24 @@ public class ManagerStudent {
 
     private void updateStudent() {
         //show list
-        String id = Validation.getString("Student ID: ", "HE\\d{6}$");
+        String id = Validation.getString("Student ID: ", Validation.ID_VALID);
         ArrayList<Enrollment> listById = getEnrollmentById(id);
         if (listById.isEmpty()) {
             System.err.println("Id not found!");
             return;
         }
         showAllEnrollmentList(listById);
+        //choose enrollment to update
         int idRecord = Validation.getInt("Choose record: ", 1, listById.size());
         Enrollment updateStudent = listById.get(idRecord - 1);
-
         //input update
-        String newName = Validation.getString("New student name: ");
+        String newName = Validation.getString("New student name: ", Validation.NAME_VALID);
         if (newName.length() > 0) {
             updateStudent.getStudent().setStudentName(newName);
 
-            String newSemester = Validation.getString("Semester code: ", "^[A-Z]{2}\\d{2}$");
-            Semester newSem = getOrCreaterSemester(newSemester);
+            String newSemester = Validation.getString("Semester code: ", Validation.SEMESTER_VALID);
+            Semester newSem = getOrCreateSemester(newSemester);
             Course newCourse = chooseCourse();
-
             //check exist
             if (isDuplicate(updateStudent.getStudent(), newSem, newCourse)) {
                 System.err.println("Duplicate enrollment update cancelled!!!");
@@ -223,7 +225,7 @@ public class ManagerStudent {
             return;
         }
         showAllEnrollmentList(listById);
-        int idRecord = Validation.getInt("Choose record: ", 1, listById.size() - 1);
+        int idRecord = Validation.getInt("Choose record: ", 1, listById.size());
         Enrollment deleteStudent = listById.get(idRecord);
         enrollments.remove(deleteStudent);
         System.out.println("Delete successfully!");

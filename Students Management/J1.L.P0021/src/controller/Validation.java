@@ -14,6 +14,11 @@ public class Validation {
 
     private static final Scanner sc = new Scanner(System.in);
 
+    public static final String ID_VALID = "^HE\\d{6}$";
+    public static final String NAME_VALID = "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*$";
+        public static final String SEMESTER_VALID = "^[A-Z]{2}\\d{2}$";
+
+
     public static int getInt(String msg, int min, int max) {
         System.out.println(msg);
         while (true) {
@@ -29,12 +34,12 @@ public class Validation {
             }
         }
     }
-    
+
     public static String getString(String msg) {
         System.out.println(msg);
-        while(true){
+        while (true) {
             String input = sc.nextLine();
-            if(input.isEmpty()){
+            if (input.isEmpty()) {
                 System.err.println("Please input a non-empty string!");
                 continue;
             }
@@ -44,31 +49,31 @@ public class Validation {
 
     public static String getString(String msg, String regex) {
         System.out.println(msg);
-        while(true){
+        while (true) {
             String input = sc.nextLine();
-            if(input.isEmpty()){
+            if (input.isEmpty()) {
                 System.out.println("Please input a non-empty string!: ");
                 continue;
             }
-            if(!input.matches(regex)){
-                System.err.println("Please input matches regex: "+ regex + " !: ");
+            if (!input.matches(regex)) {
+                System.err.println("Please input matches regex: " + regex + " !: ");
                 continue;
             }
             return input;
         }
     }
-    
-    public static boolean getYesNo(String msg){
+
+    public static boolean getYesNo(String msg) {
         System.out.println(msg);
-        while(true){
+        while (true) {
             String input = sc.nextLine().trim();
-            if(input.isEmpty()){
+            if (input.isEmpty()) {
                 System.err.println("Please input a non-empty string!");
                 continue;
             }
-            if(input.equalsIgnoreCase("y")){
+            if (input.equalsIgnoreCase("y")) {
                 return true;
-            } else if (input.equalsIgnoreCase("n")){
+            } else if (input.equalsIgnoreCase("n")) {
                 return false;
             } else {
                 System.err.println("You must be enter (Y/y) or (N/n) !!!:");
