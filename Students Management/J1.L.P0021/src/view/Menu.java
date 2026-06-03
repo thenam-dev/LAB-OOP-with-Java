@@ -44,6 +44,6 @@ public class Menu {
                     System.err.println("Please choose again!");
                     break;
             }
-        }while(true);
+        }while(choice != 5);
     }
 }

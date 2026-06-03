@@ -11,6 +11,7 @@ package model;
 public enum Course {
     JAVA("Java"),
     DOT_NET(".Net"),
+//    PYTHON("Python"),
     CPP("C/C++");
     
     private final String name;

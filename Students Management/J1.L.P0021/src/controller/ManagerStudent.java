@@ -29,41 +29,18 @@ public class ManagerStudent {
         semesterList = new ArrayList<>();
         enrollments = new ArrayList<>();
 
-        // Students
-        Student s1 = new Student("HE180111", "Nam Nguyen");
-        Student s2 = new Student("HE180112", "John Smith");
-        Student s3 = new Student("HE180113", "Anna Lee");
-
-        // Semesters
-        Semester sem1 = new Semester("SP26");
-        Semester sem2 = new Semester("SU26");
-        Semester sem3 = new Semester("FA25");
-
-        // Add enrollments
-        enrollments.add(new Enrollment(s1, sem1, Course.JAVA));
-        enrollments.add(new Enrollment(s1, sem2, Course.DOT_NET));
-        enrollments.add(new Enrollment(s2, sem1, Course.CPP));
-        enrollments.add(new Enrollment(s3, sem3, Course.JAVA));
-        enrollments.add(new Enrollment(s2, sem2, Course.DOT_NET));
-        // Add studentMap
-        studentMap.put(s1.getId(), s1);
-        studentMap.put(s2.getId(), s2);
-        studentMap.put(s3.getId(), s3);
-        //Add semesterList
-        semesterList.add(sem1);
-        semesterList.add(sem2);
-        semesterList.add(sem3);
+        loadSampleData();
     }
 
     public void createStudent() {
-        boolean isCreated=false;
+        boolean isCreating = true;
         do {
             //input studentId and studentName
             String id = Validation.getString("Student ID: ", Validation.ID_VALID);
             String name;
             if (studentMap.containsKey(id)) {
                 name = studentMap.get(id).getStudentName();
-                System.out.println("Student name: "+name);
+                System.out.println("Student name: " + name);
             } else {
                 name = Validation.getString("Student name: ", Validation.NAME_VALID);
             }
@@ -77,13 +54,12 @@ public class ManagerStudent {
                 System.err.println("Duplicate enrollment!!!");
             } else {
                 enrollments.add(new Enrollment(st, semester, course));
-                isCreated = true;
                 System.out.println("Add student information Successfully!");
             }
-            if (enrollments.size() >= 7 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
-                isCreated = false;
+            if (studentMap.size() >= 8 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
+                isCreating = false;
             }
-        } while (isCreated);
+        } while (isCreating);
     }
 
     public void findAndSort() {
@@ -93,20 +69,28 @@ public class ManagerStudent {
             return;
         }
         //enter keyName
-        String keySearch = Validation.getString("Enter key name you want to search: ");
-        //find by keyName
-        ArrayList<Enrollment> resultEnrollments = findEnrollmentByKeyName(keySearch);
-        //check exist
-        if (resultEnrollments.isEmpty()) {
-            System.err.println("No student found!");
-            return;
-        }
-        //sort by name
-        Collections.sort(resultEnrollments, new Enrollment());
-        //print
-        System.out.printf("%-15s%-20s%-10s%-8s%n", "ID", "Name", "Semester", "Course");
-        for (Enrollment resultEnrollment : resultEnrollments) {
-            System.out.println(resultEnrollment);
+        String keySearch = Validation.getStringAllowEmpty("Enter key name you want to search: ");
+        if (keySearch.isEmpty()) {
+            Collections.sort(enrollments, new Enrollment());
+            System.out.printf("%-15s%-20s%-10s%-8s%n", "ID", "Name", "Semester", "Course");
+            for (Enrollment e : enrollments) {
+                System.out.println(e);
+            }
+        } else {
+            //find by keyName
+            ArrayList<Enrollment> resultEnrollments = findEnrollmentByKeyName(keySearch);
+            //check exist
+            if (resultEnrollments.isEmpty()) {
+                System.err.println("No student found!");
+                return;
+            }
+            //sort by name
+            Collections.sort(resultEnrollments, new Enrollment());
+            //print
+            System.out.printf("%-15s%-20s%-10s%-8s%n", "ID", "Name", "Semester", "Course");
+            for (Enrollment resultEnrollment : resultEnrollments) {
+                System.out.println(resultEnrollment);
+            }
         }
     }
 
@@ -115,7 +99,7 @@ public class ManagerStudent {
             System.err.println("Database is empty!!!");
             return;
         }
-        String choice = Validation.getString("Do you want to Update or Delete? (Uu/Dd)").toUpperCase();
+        String choice = Validation.getString("Do you want to Update or Delete? (Uu/Dd)", "[UuDd]").toUpperCase();
         switch (choice) {
             case "U":
                 updateStudent();
@@ -139,9 +123,9 @@ public class ManagerStudent {
     }
 
     private Semester getOrCreateSemester(String semesterCode) {
-        for (Semester semester : semesterList) {
-            if (semester.getCode().equals(semesterCode)) {
-                return semester;
+        for (Semester s : semesterList) {
+            if (s.getCode().equals(semesterCode)) {
+                return s;
             }
         }
         Semester newSemester = new Semester(semesterCode);
@@ -164,7 +148,7 @@ public class ManagerStudent {
 
     private boolean isDuplicate(Student st, Semester semester, Course course) {
         for (Enrollment e : enrollments) {
-            if (e.getStudent() == st && e.getSemester() == semester && e.getCourse() == course) {
+            if (e.getStudent().equals(st) && e.getSemester().equals(semester) && e.getCourse().equals(course)) {
                 return true;
             }
         }
@@ -183,7 +167,42 @@ public class ManagerStudent {
     }
 
     private void updateStudent() {
+        //input id
+        String id = Validation.getString("Student ID: ", Validation.ID_VALID);
+        //get list by id
+        ArrayList<Enrollment> listById = getEnrollmentById(id);
+        //check exist
+        if (listById.isEmpty()) {
+            System.err.println("Id not found!");
+            return;
+        }
         //show list
+        showAllEnrollmentList(listById);
+        //choose enrollment to update
+        int idRecord = Validation.getInt("Choose record: ", 1, listById.size());
+        Enrollment updateStudent = listById.get(idRecord - 1);
+        //input update
+        String newName = Validation.getString("New student name: ", Validation.NAME_VALID);
+        String newSemester = Validation.getString("Semester code: ", Validation.SEMESTER_VALID);
+        Semester newSem = getOrCreateSemester(newSemester);
+        Course newCourse = chooseCourse();
+        //check exist
+        if (isDuplicate(updateStudent.getStudent(), newSem, newCourse)) {
+            System.err.println("Duplicate enrollment update cancelled!!!");
+            return;
+        }
+//            if (!sameSemester(updateStudent, newSem) && isSemesterFull(updateStudent.getStudent(), newSem)) {
+//                System.err.println("This student already has 3 courses in " + newSem.getCode() + "!");
+//                return;
+//            }
+        updateStudent.getStudent().setStudentName(newName);
+        updateStudent.setSemester(newSem);
+        updateStudent.setCourse(newCourse);
+        System.out.println("Updated successfully!");
+
+    }
+
+    private void deleteStudent() {
         String id = Validation.getString("Student ID: ", Validation.ID_VALID);
         ArrayList<Enrollment> listById = getEnrollmentById(id);
         if (listById.isEmpty()) {
@@ -191,44 +210,14 @@ public class ManagerStudent {
             return;
         }
         showAllEnrollmentList(listById);
-        //choose enrollment to update
         int idRecord = Validation.getInt("Choose record: ", 1, listById.size());
-        Enrollment updateStudent = listById.get(idRecord - 1);
-        //input update
-        String newName = Validation.getString("New student name: ", Validation.NAME_VALID);
-        if (newName.length() > 0) {
-            updateStudent.getStudent().setStudentName(newName);
-
-            String newSemester = Validation.getString("Semester code: ", Validation.SEMESTER_VALID);
-            Semester newSem = getOrCreateSemester(newSemester);
-            Course newCourse = chooseCourse();
-            //check exist
-            if (isDuplicate(updateStudent.getStudent(), newSem, newCourse)) {
-                System.err.println("Duplicate enrollment update cancelled!!!");
-                return;
-            }
-            if (!sameSemester(updateStudent, newSem) && isSemesterFull(updateStudent.getStudent(), newSem)) {
-                System.err.println("This student already has 3 courses in " + newSem.getCode() + "!");
-                return;
-            }
-            updateStudent.setSemester(newSem);
-            updateStudent.setCourse(newCourse);
-            System.out.println("Updated successfully!");
-        }
-    }
-
-    private void deleteStudent() {
-        String id = Validation.getString("Student ID: ", "HE\\d{6}$");
-        ArrayList<Enrollment> listById = getEnrollmentById(id);
-        if (listById.isEmpty()) {
-            System.err.println("Id not found!");
-            return;
-        }
-        showAllEnrollmentList(listById);
-        int idRecord = Validation.getInt("Choose record: ", 1, listById.size());
-        Enrollment deleteStudent = listById.get(idRecord);
+        Enrollment deleteStudent = listById.get(idRecord - 1);
+        //remove in list
         enrollments.remove(deleteStudent);
-        System.out.println("Delete successfully!");
+//        if(getEnrollmentById(id).isEmpty()){
+//            studentMap.remove(id);
+//        }
+        System.out.println("Deleted successfully!");
     }
 
     public void report() {
@@ -238,13 +227,13 @@ public class ManagerStudent {
         }
         Map<String, Integer> counter = new HashMap<>();
         for (Enrollment e : enrollments) {
-            String key = String.format("%-15s|%-10s", e.getStudent().getStudentName(), e.getCourse().getName());
+            String key = String.format("%-20s|%-10s", e.getStudent().getStudentName(), e.getCourse().getName());
             counter.put(key, counter.getOrDefault(key, 0) + 1);
         }
         //duyet map de in ra
-        System.out.printf("%-15s|%-10s|%-5s%n", "Student name", "Course", "Total");
+        System.out.printf("%-20s|%-10s|%-5s%n", "Student name", "Course", "Total");
         for (Map.Entry<String, Integer> entry : counter.entrySet()) { //entrySet: lay toan bo phan tu trong map
-            System.out.printf("%-15s|%-5s%n", entry.getKey(), entry.getValue());
+            System.out.printf("%-30s|%-2d%n", entry.getKey(), entry.getValue());
         }
     }
 
@@ -265,17 +254,43 @@ public class ManagerStudent {
         }
     }
 
-    private boolean sameSemester(Enrollment updateStudent, Semester newSem) {
-        return updateStudent.getSemester().getCode().equals(newSem.getCode());
-    }
-
-    private boolean isSemesterFull(Student student, Semester newSem) {
-        int count = 0;
-        for (Enrollment e : enrollments) {
-            if (e.getStudent() == student && e.getSemester().getCode().equals(newSem.getCode())) {
-                count++;
-            }
-        }
-        return count >= 3;
+//    private boolean sameSemester(Enrollment updateStudent, Semester newSem) {
+//        return updateStudent.getSemester().getCode().equals(newSem.getCode());
+//    }
+//
+//    private boolean isSemesterFull(Student student, Semester newSem) {
+//        int count = 0;
+//        for (Enrollment e : enrollments) {
+//            if (e.getStudent() == student && e.getSemester().getCode().equals(newSem.getCode())) {
+//                count++;
+//            }
+//        }
+//        return count >= 3;
+//    }
+    private void loadSampleData() {
+        // Students
+        Student s1 = new Student("HE180111", "Nguyen The Nam");
+        Student s2 = new Student("HE180112", "Lionel Messi");
+        Student s3 = new Student("HE180113", "Cristiano Ronaldo");
+        Student s4 = new Student("HE180997", "Nam");
+        // Semesters
+        Semester sem1 = new Semester("SP26");
+        Semester sem2 = new Semester("SU26");
+        Semester sem3 = new Semester("FA25");
+        // Add enrollments
+        enrollments.add(new Enrollment(s1, sem1, Course.JAVA));
+        enrollments.add(new Enrollment(s2, sem2, Course.DOT_NET));
+        enrollments.add(new Enrollment(s3, sem3, Course.CPP));
+        enrollments.add(new Enrollment(s4, sem2, Course.JAVA));
+        enrollments.add(new Enrollment(s4, sem2, Course.DOT_NET));
+        // Add studentMap
+        studentMap.put(s1.getId(), s1);
+        studentMap.put(s2.getId(), s2);
+        studentMap.put(s3.getId(), s3);
+        studentMap.put(s4.getId(), s4);
+        //Add semesterList
+        semesterList.add(sem1);
+        semesterList.add(sem2);
+        semesterList.add(sem3);
     }
 }

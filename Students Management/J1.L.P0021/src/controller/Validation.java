@@ -16,8 +16,7 @@ public class Validation {
 
     public static final String ID_VALID = "^HE\\d{6}$";
     public static final String NAME_VALID = "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*$";
-        public static final String SEMESTER_VALID = "^[A-Z]{2}\\d{2}$";
-
+    public static final String SEMESTER_VALID = "^[A-Z]{2}\\d{2}$";
 
     public static int getInt(String msg, int min, int max) {
         System.out.println(msg);
@@ -35,22 +34,16 @@ public class Validation {
         }
     }
 
-    public static String getString(String msg) {
+    public static String getStringAllowEmpty(String msg) {
         System.out.println(msg);
-        while (true) {
-            String input = sc.nextLine();
-            if (input.isEmpty()) {
-                System.err.println("Please input a non-empty string!");
-                continue;
-            }
-            return input;
-        }
+        String input = sc.nextLine().trim();
+        return input;
     }
 
     public static String getString(String msg, String regex) {
         System.out.println(msg);
         while (true) {
-            String input = sc.nextLine();
+            String input = sc.nextLine().trim();
             if (input.isEmpty()) {
                 System.out.println("Please input a non-empty string!: ");
                 continue;
