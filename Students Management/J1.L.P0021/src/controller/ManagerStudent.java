@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import model.Course;
 import model.Enrollment;
 import model.Semester;
@@ -34,7 +35,7 @@ public class ManagerStudent {
 
     public void createStudent() {
         boolean isCreating = true;
-        do {
+        while (isCreating) {
             //input studentId and studentName
             String id = Validation.getString("Student ID: ", Validation.ID_VALID);
             String name;
@@ -59,7 +60,7 @@ public class ManagerStudent {
             if (studentMap.size() >= 8 && !Validation.getYesNo("Do you want to continue (Yy/Nn)? Choose Y to continue, N to return main screen")) {
                 isCreating = false;
             }
-        } while (isCreating);
+        }
     }
 
     public void findAndSort() {
@@ -199,7 +200,6 @@ public class ManagerStudent {
         updateStudent.setSemester(newSem);
         updateStudent.setCourse(newCourse);
         System.out.println("Updated successfully!");
-
     }
 
     private void deleteStudent() {
@@ -232,7 +232,12 @@ public class ManagerStudent {
         }
         //duyet map de in ra
         System.out.printf("%-20s|%-10s|%-5s%n", "Student name", "Course", "Total");
-        for (Map.Entry<String, Integer> entry : counter.entrySet()) { //entrySet: lay toan bo phan tu trong map
+//        for (Map.Entry<String, Integer> entry : counter.entrySet()) { //entrySet: lay toan bo phan tu trong map
+//            System.out.printf("%-30s|%-2d%n", entry.getKey(), entry.getValue());
+//        }
+
+        Map<String, Integer> sortedCounter = new TreeMap<>(counter);
+        for (Map.Entry<String, Integer> entry : sortedCounter.entrySet()) {
             System.out.printf("%-30s|%-2d%n", entry.getKey(), entry.getValue());
         }
     }
@@ -273,6 +278,8 @@ public class ManagerStudent {
         Student s2 = new Student("HE180112", "Lionel Messi");
         Student s3 = new Student("HE180113", "Cristiano Ronaldo");
         Student s4 = new Student("HE180997", "Nam");
+        Student s5 = new Student("HE181111", "An An");
+        Student s6 = new Student("HE181509", "Sun");
         // Semesters
         Semester sem1 = new Semester("SP26");
         Semester sem2 = new Semester("SU26");
@@ -283,11 +290,18 @@ public class ManagerStudent {
         enrollments.add(new Enrollment(s3, sem3, Course.CPP));
         enrollments.add(new Enrollment(s4, sem2, Course.JAVA));
         enrollments.add(new Enrollment(s4, sem2, Course.DOT_NET));
+        enrollments.add(new Enrollment(s5, sem2, Course.JAVA));
+        enrollments.add(new Enrollment(s5, sem3, Course.JAVA));
+        enrollments.add(new Enrollment(s6, sem2, Course.CPP));
+
         // Add studentMap
         studentMap.put(s1.getId(), s1);
         studentMap.put(s2.getId(), s2);
         studentMap.put(s3.getId(), s3);
         studentMap.put(s4.getId(), s4);
+        studentMap.put(s5.getId(), s5);
+        studentMap.put(s6.getId(), s6);
+
         //Add semesterList
         semesterList.add(sem1);
         semesterList.add(sem2);

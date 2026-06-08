@@ -9,6 +9,7 @@ package view;
  * @author ACER
  */
 public class J1LP0021 {
+
     /**
      * @param args the command line arguments
      */

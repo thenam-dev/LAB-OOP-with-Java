@@ -26,5 +26,4 @@ public class Semester {
     public void setCode(String code) {
         this.code = code;
     }
-
 }

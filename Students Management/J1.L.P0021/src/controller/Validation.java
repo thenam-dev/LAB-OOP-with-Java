@@ -20,18 +20,21 @@ public class Validation {
 
     public static int getInt(String msg, int min, int max) {
         System.out.println(msg);
-        while (true) {
+        int number = 0;
+        boolean isValid = true;
+        while (isValid) {
             try {
-                int result = Integer.parseInt(sc.nextLine().trim());
-                if (result < min || result > max) {
+                number = Integer.parseInt(sc.nextLine().trim());
+                if (number < min || number > max) {
                     System.err.println("Please input number in range [" + min + ", " + max + "]!: ");
                 } else {
-                    return result;
+                    isValid = false;
                 }
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.err.println("Input must be integer number!: ");
             }
         }
+        return number;
     }
 
     public static String getStringAllowEmpty(String msg) {
@@ -42,8 +45,10 @@ public class Validation {
 
     public static String getString(String msg, String regex) {
         System.out.println(msg);
-        while (true) {
-            String input = sc.nextLine().trim();
+        boolean isValid = true;
+        String input = null;
+        while (isValid) {
+            input = sc.nextLine().trim();
             if (input.isEmpty()) {
                 System.out.println("Please input a non-empty string!: ");
                 continue;
@@ -52,25 +57,31 @@ public class Validation {
                 System.err.println("Please input matches regex: " + regex + " !: ");
                 continue;
             }
-            return input;
+            isValid = false;
         }
+        return input;
     }
 
     public static boolean getYesNo(String msg) {
         System.out.println(msg);
-        while (true) {
+        boolean isValid = true;
+        boolean result = true;
+        while (isValid) {
             String input = sc.nextLine().trim();
             if (input.isEmpty()) {
                 System.err.println("Please input a non-empty string!");
                 continue;
             }
             if (input.equalsIgnoreCase("y")) {
-                return true;
+                result = true;
+                isValid = false;
             } else if (input.equalsIgnoreCase("n")) {
-                return false;
+                result = false;
+                isValid = false;
             } else {
                 System.err.println("You must be enter (Y/y) or (N/n) !!!:");
             }
         }
+        return result;
     }
 }
