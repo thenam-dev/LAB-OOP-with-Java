@@ -6,7 +6,6 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import model.Fruit;
@@ -20,40 +19,38 @@ import model.OrderDetails;
 public class ManagerShop {
 
     private List<Fruit> listFruit;
-    private Hashtable<String, Order> orderTable;
+    private HashMap<String, Order> orderTable;
 
     public ManagerShop() {
         listFruit = new ArrayList<>();
-        orderTable = new Hashtable<>();
+        orderTable = new HashMap<>();
         listFruit.add(new Fruit("Apple", 2.5, 20, "USA"));
         listFruit.add(new Fruit("Banana", 1.2, 50, "Vietnam"));
         listFruit.add(new Fruit("Orange", 3.0, 30, "France"));
         listFruit.add(new Fruit("Mango", 4.5, 25, "Thailand"));
         listFruit.add(new Fruit("Pineapple", 2.8, 15, "Mexico"));
-
     }
 
     public void createFruit() {
-        boolean check;
-        do {
-            String name;
-            Fruit fruit;
-            do {
+        boolean check = true;
+        while (check) {
+            String name = Validation.getString("Enter fruit name: ", ".*");
+            Fruit fruit = findFruitByName(name);
+
+            while (fruit != null) {
+                System.err.println("Fruit has already existed in database!");
                 name = Validation.getString("Enter fruit name: ", ".*");
                 fruit = findFruitByName(name);
-                if (fruit != null) {
-                    System.err.println("Fruit have been existed in database!");
-                }
-
-            } while (fruit != null);
+            }
             double price = Validation.getDouble("Enter price: ", 0.01, Double.MAX_VALUE);
             int quantity = Validation.getInt("Enter quantity: ", 1, Integer.MAX_VALUE);
             String origin = Validation.getString("Enter origin: ");
 
             listFruit.add(new Fruit(name, price, quantity, origin));
             System.out.println("Add successfully!");
+
             check = Validation.getYesNo("Do you want to add more fruit? (Y/y) or (N/n): ");
-        } while (check);
+        }
     }
 
     public void viewOrder() {
@@ -122,8 +119,8 @@ public class ManagerShop {
     }
 
     private void printFruitMenu() {
-        System.out.printf("|++%-5s++|++%-15s++|++%-15s++|++%-10s++|\n", "Item", "Fruit Name", "Origin", "Price");
-        System.out.println("------------------------------------------");
+        System.out.printf("|++ %-4s ++|++ %-10s ++|++ %-6s ++|++ %-5s ++|\n", "Item", "Fruit Name", "Origin", "Price");
+        System.out.println("------------------------------------------------------");
         for (Fruit f : listFruit) {
             System.out.println(f);
         }
@@ -151,7 +148,7 @@ public class ManagerShop {
     }
 
     private void printCart(ArrayList<OrderDetails> cart) {
-        System.out.println("\nProduct       | Quantity  | Price  | Amount   ");
+        System.out.println("\nProduct  | Quantity  | Price  | Amount   ");
         System.out.println("----------------------------------------------");
         for (OrderDetails od : cart) {
             System.out.println(od);

@@ -43,7 +43,7 @@ public class OrderDetails {
 
     @Override
     public String toString() {
-        return String.format("%-14s| %-9d| %-9.2f| %-10.2f\n", fruit.getFruitName(), quantityOrder, fruit.getPrice(), quantityOrder * fruit.getPrice());
+        return String.format("%-10s| %-10d| %-9.2f| %-10.2f\n", fruit.getFruitName(), quantityOrder, fruit.getPrice(), quantityOrder * fruit.getPrice());
     }
 
 }

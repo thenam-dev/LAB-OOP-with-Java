@@ -78,7 +78,7 @@ public class Fruit {
 
     @Override
     public String toString() {
-        return String.format("|++%-5s++|++%-15s++|++%-15s++|++%-10.2f$++|\n", fruitId,fruitName,origin,price);
+        return String.format("|%-13s%-16s%-15s%-5.2f$  |", fruitId,fruitName,origin,price);
     }
 
 }

@@ -17,6 +17,7 @@ public class Menu {
         ManagerShop m = new ManagerShop();
         int choice;
         do {
+            System.out.println("=======Fruit Management=======");
             System.out.println("1.Create Fruit.");
             System.out.println("2.View Orders.");
             System.out.println("3.Shopping(for buyer).");
