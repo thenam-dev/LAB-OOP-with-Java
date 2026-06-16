@@ -23,10 +23,10 @@ public class Order {
         orderId = COUNT++;
     }
 
-    public Order(int orderId, String customerName, List<OrderDetails> items, double totalBills) {
-        this.orderId = orderId;
+    public Order(String customerName, List<OrderDetails> cart, double totalBills) {
+        this.orderId = COUNT++;
         this.customerName = customerName;
-        this.items = items;
+        this.items = cart;
         this.totalBills = totalBills;
     }
 
@@ -36,13 +36,6 @@ public class Order {
 
     public static void setCOUNT(int COUNT) {
         Order.COUNT = COUNT;
-    }
-
-    public Order(String customerName, ArrayList<OrderDetails> cart, double totalBill) {
-        this.orderId = COUNT++;
-        this.customerName = customerName;
-        this.items = cart;
-        this.totalBills = totalBill;
     }
 
     public int getOrderId() {
@@ -76,6 +69,5 @@ public class Order {
     public void setTotalBills(double totalBills) {
         this.totalBills = totalBills;
     }
-    
-    
+
 }

@@ -11,9 +11,9 @@ import java.util.Scanner;
  * @author ACER
  */
 public class Validation {
-    
+
     private static final Scanner sc = new Scanner(System.in);
-    
+
     public static int getInt(String msg, int min, int max) {
         System.out.println(msg);
         while (true) {
@@ -29,7 +29,7 @@ public class Validation {
             }
         }
     }
-    
+
     public static double getDouble(String msg, double min, double max) {
         System.out.println(msg);
         while (true) {
@@ -43,18 +43,6 @@ public class Validation {
             } catch (Exception e) {
                 System.err.println("Input must be real number!: ");
             }
-        }
-    }
-
-    public static String getString(String msg) {
-        System.out.println(msg);
-        while (true) {
-            String input = sc.nextLine();
-            if (input.isEmpty()) {
-                System.err.println("Please input a non-empty string!");
-                continue;
-            }
-            return input;
         }
     }
 
@@ -73,7 +61,7 @@ public class Validation {
             return input;
         }
     }
-    
+
     public static boolean getYesNo(String msg) {
         System.out.println(msg);
         while (true) {
