@@ -49,10 +49,10 @@ public class Matrix {
     public void inputMatrix(String msg) {
         int row = Validation.getInt("Enter Row " + msg + ": ");
         int column = Validation.getInt("Enter Column " + msg + ": ");
-        matrix = new int[row][column];
+        this.matrix = new int[row][column];
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
-                matrix[i][j] = Validation.getInt("Enter " + msg + " [" + (i + 1) + "][" + (j + 1) + "]: ");
+                this.matrix[i][j] = Validation.getInt("Enter " + msg + " [" + (i + 1) + "][" + (j + 1) + "]: ");
             }
         }
     }
