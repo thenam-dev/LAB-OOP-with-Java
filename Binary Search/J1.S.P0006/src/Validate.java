@@ -1,5 +1,4 @@
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -56,7 +55,7 @@ public class Validate {
 
     public void display(String msg, int[] arr) {
         System.out.println(msg);
-        System.out.println(Arrays.toString(arr));
+//        System.out.println(Arrays.toString(arr));
     }
 
     public int binarySearch(int[] arr, int findNumber) {
